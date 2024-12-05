@@ -11,36 +11,14 @@ let grid = [];
 eachLine(filename, function(line) {
 	grid.push(line.split(''));
 }).then(function(err) {
-	for(let y=0;y<grid.length;y++) {
+	for(let y=1;y<grid.length-1;y++) {
 		for(let x=0;x<grid[y].length;x++) {
-			if(grid[y][x]==='X') {
-				if(grid[y][x+1]==='M'&&grid[y][x+2]==='A'&&grid[y][x+3]==='S') {
+			if(grid[y][x]==='A') {
+				if(((grid[y+1][x+1]==='M'&&grid[y-1][x-1]==='S') ||
+					  (grid[y+1][x+1]==='S'&&grid[y-1][x-1]==='M')) &&
+					 ((grid[y+1][x-1]==='M'&&grid[y-1][x+1]==='S') ||
+						(grid[y+1][x-1]==='S'&&grid[y-1][x+1]==='M'))) {
 					answer++;
-				}
-				if(grid[y][x-1]==='M'&&grid[y][x-2]==='A'&&grid[y][x-3]==='S') {
-					answer++;
-				}
-				if(y>2) {
-					if(grid[y-1][x+1]==='M'&&grid[y-2][x+2]==='A'&&grid[y-3][x+3]==='S') {
-						answer++;
-					}
-					if(grid[y-1][x-1]==='M'&&grid[y-2][x-2]==='A'&&grid[y-3][x-3]==='S') {
-						answer++;
-					}
-					if(grid[y-1][x]==='M'&&grid[y-2][x]==='A'&&grid[y-3][x]==='S') {
-						answer++;
-					}
-				}
-				if(y+3<grid.length) {
-					if(grid[y+1][x+1]==='M'&&grid[y+2][x+2]==='A'&&grid[y+3][x+3]==='S') {
-						answer++;
-					}
-					if(grid[y+1][x-1]==='M'&&grid[y+2][x-2]==='A'&&grid[y+3][x-3]==='S') {
-						answer++;
-					}
-					if(grid[y+1][x]==='M'&&grid[y+2][x]==='A'&&grid[y+3][x]==='S') {
-						answer++;
-					}
 				}
 			}
 		}
