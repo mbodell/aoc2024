@@ -1,0 +1,27 @@
+const lineReader = require("line-reader");
+const Promise = require('bluebird');
+
+const eachLine = Promise.promisify(lineReader.eachLine);
+
+let filename = process.argv.slice(2)[0] || 'input.txt';
+
+let answer = 0;
+
+let stones = [];
+
+function blink(arr, num) {
+	let st = [];
+	if(num===0) {
+		return 0;
+	}
+	for(let i=0;i<arr.length;i++) {
+
+	}
+}
+
+eachLine(filename, function(line) {
+	stones = line.split(' ').map((x)=>parseInt(x));
+}).then(function(err) {
+	answer = blink(stones, 25);
+  console.log(answer);
+});
