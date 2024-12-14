@@ -16,26 +16,26 @@ const BUTTB = 1;
 const PRIZE = 2;
 const LINE = 3;
 
+const EXTRA = 10000000000000;
+
 const COSTA = 3;
 const COSTB = 1;
-const MAXBUT = 101;
 
 let state = 0;
 
 function cheapestSolve(a, b, p) {
-	let solve = false;
-	let cheapSolve = MAXBUT*(COSTA+COSTB);
-	for(let ba=0;ba<MAXBUT;ba++) {
-		let nb = (p[0]-ba*a[0])/b[0];
-		if(((a[0]*ba+b[0]*nb)===p[0]) &&
-		   ((a[1]*ba+b[1]*nb)===p[1])) {
-			solve = true;
-			if(cheapSolve>(ba*COSTA+nb*COSTB)) {
-				cheapSolve = ba*COSTA+nb*COSTB;
-			 }
-		}
+	let cheapSolve = 0;
+	let delt = a[0]*b[1]-a[1]*b[0];
+	let deltX = p[0]*b[1]-p[1]*b[0];
+	let deltY = a[0]*p[1]-a[1]*p[0];
+	let ba = Math.floor(deltX/delt);
+	let nb = Math.floor(deltY/delt);
+	if(((a[0]*ba+b[0]*nb)===p[0]) &&
+		((a[1]*ba+b[1]*nb)===p[1])) {
+		cheapSolve = ba*COSTA+nb*COSTB;
+		//console.log(`We solved ${p} with ${a} and ${b} due to ${ba} a button presses and ${nb} b button presses for ${cheapSolve} for the cheap solve.`);
 	}
-	return (solve?cheapSolve:0);
+	return cheapSolve;
 }
 
 eachLine(filename, function(line) {
@@ -52,7 +52,7 @@ eachLine(filename, function(line) {
 			break;
 		case PRIZE:
 			inf = line.split(': ')[1].split(', ').map((x)=>parseInt(x.split('=')[1]));
-			prize.push([inf[0],inf[1]]);
+			prize.push([EXTRA+inf[0],EXTRA+inf[1]]);
 			break;
 	}
 	state = (state+1)%4;
