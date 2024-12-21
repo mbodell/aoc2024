@@ -10,6 +10,8 @@ let answer = 0;
 let inp = [];
 let num = [];
 
+let memo = [];
+
 const NUMA = 'A';
 const NUM0 = '0';
 const NUM1 = '1';
@@ -704,7 +706,7 @@ function findKey(s) {
 		let nret = [];
 		for(let j=0;j<ret.length;j++) {
 			for(let k=0;k<n.length;k++) {
-				nret.push(ret[j] + n[k]);
+				nret.push(ret[j]+n[k]);
 			}
 		}
 		ret = nret;
@@ -712,36 +714,61 @@ function findKey(s) {
 	return ret;
 }
 
+function findKeyR(str,num) {
+	if(num===0) {
+		return str;
+	} else {
+		return findKeyR(findKey(str)[0],num-1);
+	}
+}
+
+function findKeySlen(str, num) {
+	if(num===0) {
+		return str.length;
+	} else {
+		if(num<24&&memo[num][str]!==undefined) {
+			return memo[num][str];
+		}
+		let n = 0;
+		let s=str.split('A').map((x)=>x+'A');
+		for(let i=0;i<s.length-1;i++) {
+			let nl = 423797863237514;
+			let f=findKey(s[i]);
+			for(let j=0;j<f.length;j++) {
+				let nj = findKeySlen(f[j],num-1);
+				if(nj<nl) {
+					nl=nj;
+				}
+			}
+			n += nl;
+		}
+		if(num<24) {
+			memo[num][str] = n;
+		}
+		return n;
+	}
+}
+
 eachLine(filename, function(line) {
 	inp.push(line.split(''));
 	num.push(parseInt(line));
 }).then(function(err) {
+	for(let i=0;i<24;i++) {
+		memo[i] = [];
+	}
 	for(let i=0;i<inp.length;i++) {
 		let f=findNum(inp[i]);
-		let n = [];
 		let nl = 0;
-		let nf = [];
 		for(let j=0;j<f.length;j++) {
-			let ff=findKey(f[j]);
-			for(let k=0;k<ff.length;k++) {
-				let fff=findKey(ff[k]);
-				for(let l=0;l<fff.length;l++) {
-					if(n.length===0) {
-						nl = fff[l].length;
-						n.push(fff[l]);
-						nf.push(ff[k]);
-					} else if (fff[l].length < nl) {
-						n = [];
-						nf = [];
-						nl = fff[l].length;
-						n.push(fff[l]);
-						nf.push(ff[k]);
-					}
-				}
+			let len = findKeySlen(f[j],25);
+			if(nl===0) {
+				nl = len;
+			} else if (len < nl) {
+				nl = len;
 			}
 		}
 		answer += num[i]*nl;
-		console.log(`For ${i} which is ${inp[i]} we got ${num[i]*nl} from ${f} with ${nf} and ${n}`);
+		console.log(`For ${i} which is ${inp[i]} we got ${num[i]*nl} from ${f}`);
 	}
   console.log(answer);
 });
