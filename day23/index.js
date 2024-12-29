@@ -41,7 +41,7 @@ eachLine(filename, function(line) {
 			if(indNode[ts[i]]!== indNode[j] &&
 			  adj[indNode[ts[i]]].has(indNode[j])) {
 				let ins = adj[indNode[ts[i]]].intersection(adj[indNode[j]]);
-				ins.forEach((val)=>threes.add([indNode[ts[i]],indNode[j],val].sort().map((x)=>x.toString()).reduce((a,b)=>a+","+b)));
+				ins.forEach((val)=>threes.add([indNode[ts[i]],indNode[j],val].sort().reduce((a,b)=>a+","+b)));
 			}
 		}
 	}
